@@ -43,7 +43,7 @@ class ClassLoader {
 	private static function directories() {
 		if ( empty( self::$dirs ) ) {
 			$dir = __DIR__;
-			$target = preg_replace( '@/mu-plugins/hm-rss-delivery.*@', '/mu-plugins/hm-rss-delivery/src', $dir );
+			$target = preg_replace( '@/mu-plugins/rss-delivery.*@', '/mu-plugins/rss-delivery/src', $dir );
 
 			self::$dirs = [
 				$target,
