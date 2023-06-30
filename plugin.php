@@ -17,4 +17,4 @@ namespace HM\RSS_Delivery;
 require_once __DIR__ . '/inc/namespace.php';
 require_once __DIR__ . '/autoloader.php';
 
-HM\RSS_Delivery\bootstrap();
+bootstrap();

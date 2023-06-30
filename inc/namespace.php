@@ -15,7 +15,7 @@ use Tarosky\FeedGenerator\DeliveryManager;
 const PREFIX = 'hm_featured_media';
 
 /**
- * Plugin bootstrapper vsc
+ * Plugin bootstrapper
  */
 function bootstrap() {
 	DeliveryManager::instance();

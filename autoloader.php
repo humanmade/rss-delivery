@@ -2,7 +2,7 @@
 /**
  * オートローダー.
  *
- * @package RSSDelivery
+ * @package HM\RSS_Delivery
  */
 
 /**
