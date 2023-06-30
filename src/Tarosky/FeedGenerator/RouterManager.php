@@ -2,7 +2,7 @@
 /**
  * パーマリンク関係を扱うファイル
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
 namespace Tarosky\FeedGenerator;

@@ -1,45 +1,45 @@
 <?php
 /**
- * FujiTV SmartNews Feed
+ * Human Made RSS Delivery - Dogatch
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use FujiTV\Rss_Delivery;
+use HM\RSS_Delivery;
 use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\Excite;
+use Tarosky\FeedGenerator\Service\Dogatch;
 use WP_Query;
 
 /**
- * RSS for Fuji TV Excite
+ * HM Dogatch 用RSS
  */
-class FujiTVExcite extends Excite {
+class HMDogatch extends Dogatch {
 
 	/**
-	 * Display confirmation identification ID for each article.
+	 * 記事ごとの表示確認識別ID.
 	 *
-	 * @var string $id Identification ID.
+	 * @var string $id 識別ID.
 	 */
-	protected $id = 'excite';
+	protected $id = 'dogatch';
 
 	/**
-	 * Display name for each service.
+	 * サービスごとの表示名.
 	 *
-	 * @var string $label Label.
+	 * @var string $label 表示ラベル.
 	 */
-	protected $label = 'Excite';
+	protected $label = 'TV Dogatch';
 
 	/**
-	 * Display order priority.
+	 * 表示順の優先度.
 	 *
-	 * @var int $order_priority Display priority, the higher the priority.
+	 * @var int $order_priolity 表示優先度 大きいほうが優先度が高い.
 	 */
-	protected $order_priolity = 80;
+	protected $order_priolity = 95;
 
 	/**
-	 * Specify the conditions to create a feed
+	 * Feedを作り出す条件を指定する
 	 *
 	 * @return array $query_arg query_args.
 	 */
@@ -48,10 +48,10 @@ class FujiTVExcite extends Excite {
 		$id = $this->get_id();
 
 		$query_arg = [
-			'feed'          => 'excite',
+			'feed'          => 'dogatch',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
-			'post_status'   => 'publish',
+			'post_status'   => [ 'publish', 'trash' ],
 			'orderby'       => [
 				'date' => 'DESC',
 			],
@@ -68,23 +68,21 @@ class FujiTVExcite extends Excite {
 	}
 
 	/**
-	 * Query overwrite
+	 * クエリの上書き
 	 *
-	 * @param WP_Query $wp_query Query.
+	 * @param WP_Query $wp_query クエリ.
 	 */
 	public function pre_get_posts( WP_Query &$wp_query ) {
 
 		/**
 		 * CHANNEL
 		 */
-		// Set the time of lastBuildDate to the local timezone.
+		// lastBuildDateの時間をローカルタイムゾーンに合わせる.
 		add_filter( 'get_feed_build_date', function( $max_modified_time, $format ) {
 			return $this->to_local_time( $max_modified_time, $format, 'Asia/Tokyo', true );
 		}, 10, 2 );
 
-		add_action( 'rss_add_channel', function() {
-			Rss_Delivery\print_feed_copyright();
-		} );
+		remove_action( 'rss2_head', 'rss2_site_icon' );
 
 		$args = $this->get_query_arg();
 		if ( ! empty( $args ) ) {
@@ -92,20 +90,21 @@ class FujiTVExcite extends Excite {
 				$wp_query->set( $key, $val );
 			}
 		}
-		add_action( 'do_feed_excite', [ $this, 'do_feed' ] );
+		add_action( 'do_feed_dogatch', [ $this, 'do_feed' ] );
 	}
 
 	/**
-	 * If the filter hook cannot handle it, recreate the entire feed. Created based on rss2.0
+	 * フィルター・フックで対応しきれない場合はfeed全体を作り直す
+	 * rss2.0をベースに作成
 	 */
 	public function do_feed() {
 		parent::do_feed();
 	}
 
 	/**
-	 * Generate and return each item of Feed
+	 * Feedの一つ一つのアイテムを生成して返す
 	 *
-	 * @param \WP_Post $post Post Object.
+	 * @param \WP_Post $post 投稿記事.
 	 */
 	protected function render_item( $post ) {
 		parent::render_item( $post );

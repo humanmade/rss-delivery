@@ -1,20 +1,20 @@
 <?php
 /**
- * FujiTV SmartNews Feed
+ * Human Made RSS Delivery - SmartNews Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
 use Tarosky\FeedGenerator\DeliveryManager;
 use Tarosky\FeedGenerator\Service\SmartNews;
 use WP_Query;
 
 /**
- * FujiTVSmartnews用RSS
+ * HM Smart News用RSS
  */
-class FujiTVSmartNews extends SmartNews {
+class HMSmartNews extends SmartNews {
 
 	/**
 	 * 記事ごとの表示確認識別ID.

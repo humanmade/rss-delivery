@@ -1,43 +1,41 @@
 <?php
 /**
- * FujiTV TV Dogatch Feed
+ * Human Made RSS Delivery - Site Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use FujiTV\Rss_Delivery;
-use FujiTV\Theme\Assets;
 use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\Dogatch;
+use Tarosky\FeedGenerator\Service\HMMain;
 use WP_Query;
 
 /**
- * FujiTV TV Dogatch用RSS
+ * HM Main 用RSS
  */
-class FujiTVDogatch extends Dogatch {
+class HMMMain extends HMMain {
 
 	/**
 	 * 記事ごとの表示確認識別ID.
 	 *
 	 * @var string $id 識別ID.
 	 */
-	protected $id = 'dogatch';
+	protected $id = 'main';
 
 	/**
 	 * サービスごとの表示名.
 	 *
 	 * @var string $label 表示ラベル.
 	 */
-	protected $label = 'TV Dogatch';
+	protected $label = 'Main';
 
 	/**
 	 * 表示順の優先度.
 	 *
 	 * @var int $order_priolity 表示優先度 大きいほうが優先度が高い.
 	 */
-	protected $order_priolity = 95;
+	protected $order_priolity = 100;
 
 	/**
 	 * Feedを作り出す条件を指定する
@@ -49,10 +47,10 @@ class FujiTVDogatch extends Dogatch {
 		$id = $this->get_id();
 
 		$query_arg = [
-			'feed'          => 'dogatch',
+			'feed'          => 'main',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
-			'post_status'   => [ 'publish', 'trash' ],
+			'post_status'   => 'publish',
 			'orderby'       => [
 				'date' => 'DESC',
 			],
@@ -74,24 +72,7 @@ class FujiTVDogatch extends Dogatch {
 	 * @param WP_Query $wp_query クエリ.
 	 */
 	public function pre_get_posts( WP_Query &$wp_query ) {
-
-		/**
-		 * CHANNEL
-		 */
-		// lastBuildDateの時間をローカルタイムゾーンに合わせる.
-		add_filter( 'get_feed_build_date', function( $max_modified_time, $format ) {
-			return $this->to_local_time( $max_modified_time, $format, 'Asia/Tokyo', true );
-		}, 10, 2 );
-
-		remove_action( 'rss2_head', 'rss2_site_icon' );
-
-		$args = $this->get_query_arg();
-		if ( ! empty( $args ) ) {
-			foreach ( $args as $key => $val ) {
-				$wp_query->set( $key, $val );
-			}
-		}
-		add_action( 'do_feed_dogatch', [ $this, 'do_feed' ] );
+		parent::pre_get_posts( $wp_query );
 	}
 
 	/**

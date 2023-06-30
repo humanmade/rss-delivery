@@ -2,7 +2,7 @@
 /**
  * RSS基本動作抽象クラス
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
 namespace Tarosky\FeedGenerator;

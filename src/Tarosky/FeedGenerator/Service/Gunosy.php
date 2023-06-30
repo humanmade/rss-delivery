@@ -2,7 +2,7 @@
 /**
  * Gunosy Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
 namespace Tarosky\FeedGenerator\Service;

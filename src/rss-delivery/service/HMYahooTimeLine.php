@@ -1,41 +1,42 @@
 <?php
 /**
- * FujiTV Main Site Feed
+ * Human Made RSS Delivery - Yahoo Time Line Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
+use HM\RSS_Delivery;
 use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\FujiMain;
+use Tarosky\FeedGenerator\Service\YahooTimeLine;
 use WP_Query;
 
 /**
- * FujiTVMain用RSS
+ * HM Yahoo Time Line 用RSS
  */
-class FujiTVMain extends FujiMain {
+class HMYahooTimeLine extends YahooTimeLine {
 
 	/**
 	 * 記事ごとの表示確認識別ID.
 	 *
 	 * @var string $id 識別ID.
 	 */
-	protected $id = 'main';
+	protected $id = 'yahoo-tl';
 
 	/**
 	 * サービスごとの表示名.
 	 *
 	 * @var string $label 表示ラベル.
 	 */
-	protected $label = 'Main';
+	protected $label = 'YahooTimeLine';
 
 	/**
 	 * 表示順の優先度.
 	 *
 	 * @var int $order_priolity 表示優先度 大きいほうが優先度が高い.
 	 */
-	protected $order_priolity = 100;
+	protected $order_priolity = 90;
 
 	/**
 	 * Feedを作り出す条件を指定する
@@ -47,10 +48,10 @@ class FujiTVMain extends FujiMain {
 		$id = $this->get_id();
 
 		$query_arg = [
-			'feed'          => 'main',
+			'feed'          => 'yahoo-tl',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
-			'post_status'   => 'publish',
+			'post_status'   => [ 'publish', 'trash' ],
 			'orderby'       => [
 				'date' => 'DESC',
 			],
@@ -72,7 +73,26 @@ class FujiTVMain extends FujiMain {
 	 * @param WP_Query $wp_query クエリ.
 	 */
 	public function pre_get_posts( WP_Query &$wp_query ) {
-		parent::pre_get_posts( $wp_query );
+
+		/**
+		 * CHANNEL
+		 */
+		// lastBuildDateの時間をローカルタイムゾーンに合わせる.
+		add_filter( 'get_feed_build_date', function( $max_modified_time, $format ) {
+			return $this->to_local_time( $max_modified_time, $format, 'Asia/Tokyo', true );
+		}, 10, 2 );
+
+		add_action( 'rss_add_channel', function() {
+			Rss_Delivery\print_feed_copyright();
+		} );
+
+		$args = $this->get_query_arg();
+		if ( ! empty( $args ) ) {
+			foreach ( $args as $key => $val ) {
+				$wp_query->set( $key, $val );
+			}
+		}
+		add_action( 'do_feed_yahoo-tl', [ $this, 'do_feed' ] );
 	}
 
 	/**

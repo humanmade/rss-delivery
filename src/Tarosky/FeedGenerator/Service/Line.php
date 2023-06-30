@@ -2,12 +2,11 @@
 /**
  * LINE Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
 namespace Tarosky\FeedGenerator\Service;
 
-use const FujiTV\Post_Meta\PREFIX as POST_META;
 use Tarosky\FeedGenerator\AbstractFeed;
 use Tarosky\FeedGenerator\DeliveryManager;
 use WP_Query;

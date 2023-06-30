@@ -1,8 +1,8 @@
 <?php
 /**
- * FujiTVMain Feed
+ * HM\RSS_Delivery - Main Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
 namespace Tarosky\FeedGenerator\Service;
@@ -12,9 +12,9 @@ use Tarosky\FeedGenerator\DeliveryManager;
 use WP_Query;
 
 /**
- * FujiMainSite用RSS
+ * HM MainSite用RSS
  */
-class FujiMain extends AbstractFeed {
+class HMMain extends AbstractFeed {
 
 	/**
 	 * 記事ごとの表示確認識別ID.
