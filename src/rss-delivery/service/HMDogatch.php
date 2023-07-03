@@ -1,22 +1,21 @@
 <?php
 /**
- * FujiTV TV Dogatch Feed
+ * Human Made RSS Delivery - Dogatch
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use FujiTV\Rss_Delivery;
-use FujiTV\Theme\Assets;
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\Dogatch;
+use HM\RSS_Delivery;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\Dogatch;
 use WP_Query;
 
 /**
- * FujiTV TV Dogatch用RSS
+ * HM Dogatch 用RSS
  */
-class FujiTVDogatch extends Dogatch {
+class HMDogatch extends Dogatch {
 
 	/**
 	 * 記事ごとの表示確認識別ID.

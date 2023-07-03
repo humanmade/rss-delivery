@@ -1,41 +1,42 @@
 <?php
 /**
- * FujiTV SmartNews Feed
+ * Human Made RSS Delivery - Yahoo Time Line Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\SmartNews;
+use HM\RSS_Delivery;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\YahooTimeLine;
 use WP_Query;
 
 /**
- * FujiTVSmartnews用RSS
+ * HM Yahoo Time Line 用RSS
  */
-class FujiTVSmartNews extends SmartNews {
+class HMYahooTimeLine extends YahooTimeLine {
 
 	/**
 	 * 記事ごとの表示確認識別ID.
 	 *
 	 * @var string $id 識別ID.
 	 */
-	protected $id = 'smartnews';
+	protected $id = 'yahoo-tl';
 
 	/**
 	 * サービスごとの表示名.
 	 *
 	 * @var string $label 表示ラベル.
 	 */
-	protected $label = 'SmartNews';
+	protected $label = 'YahooTimeLine';
 
 	/**
 	 * 表示順の優先度.
 	 *
 	 * @var int $order_priolity 表示優先度 大きいほうが優先度が高い.
 	 */
-	protected $order_priolity = 75;
+	protected $order_priolity = 90;
 
 	/**
 	 * Feedを作り出す条件を指定する
@@ -47,10 +48,10 @@ class FujiTVSmartNews extends SmartNews {
 		$id = $this->get_id();
 
 		$query_arg = [
-			'feed'          => 'smartnews',
+			'feed'          => 'yahoo-tl',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
-			'post_status'   => 'publish',
+			'post_status'   => [ 'publish', 'trash' ],
 			'orderby'       => [
 				'date' => 'DESC',
 			],
@@ -81,13 +82,17 @@ class FujiTVSmartNews extends SmartNews {
 			return $this->to_local_time( $max_modified_time, $format, 'Asia/Tokyo', true );
 		}, 10, 2 );
 
+		add_action( 'rss_add_channel', function() {
+			Rss_Delivery\print_feed_copyright();
+		} );
+
 		$args = $this->get_query_arg();
 		if ( ! empty( $args ) ) {
 			foreach ( $args as $key => $val ) {
 				$wp_query->set( $key, $val );
 			}
 		}
-		add_action( 'do_feed_smartnews', [ $this, 'do_feed' ] );
+		add_action( 'do_feed_yahoo-tl', [ $this, 'do_feed' ] );
 	}
 
 	/**

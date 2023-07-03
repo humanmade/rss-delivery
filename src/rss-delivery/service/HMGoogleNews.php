@@ -1,50 +1,41 @@
 <?php
 /**
- * FujiTV LINE Feed
+ * Human Made RSS Delivery - Google News Site Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\Line;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\GoogleNews;
 use WP_Query;
 
 /**
- * FujiTVLINE用RSS
+ * HM Google News用RSS
  */
-class FujiTVLine extends Line {
+class HMGoogleNews extends GoogleNews {
 
 	/**
 	 * 記事ごとの表示確認識別ID.
 	 *
 	 * @var string $id 識別ID.
 	 */
-	protected $id = 'line';
+	protected $id = 'googlenews';
 
 	/**
 	 * サービスごとの表示名.
 	 *
 	 * @var string $label 表示ラベル.
 	 */
-	protected $label = 'LINE';
+	protected $label = 'GoogleNews';
 
 	/**
 	 * 表示順の優先度.
 	 *
 	 * @var int $order_priolity 表示優先度 大きいほうが優先度が高い.
 	 */
-	protected $order_priolity = 85;
-
-	/**
-	 * Feedの一つ一つのアイテムを生成して返す
-	 *
-	 * @param \WP_Post $post 投稿記事.
-	 */
-	protected function render_item( $post ) {
-		parent::render_item( $post );
-	}
+	protected $order_priolity = 70;
 
 	/**
 	 * Feedを作り出す条件を指定する
@@ -56,7 +47,7 @@ class FujiTVLine extends Line {
 		$id = $this->get_id();
 
 		$query_arg = [
-			'feed'          => 'line',
+			'feed'          => 'googlenews',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
 			'post_status'   => 'publish',
@@ -90,5 +81,14 @@ class FujiTVLine extends Line {
 	 */
 	public function do_feed() {
 		parent::do_feed();
+	}
+
+	/**
+	 * Feedの一つ一つのアイテムを生成して返す
+	 *
+	 * @param \WP_Post $post 投稿記事.
+	 */
+	protected function render_item( $post ) {
+		parent::render_item( $post );
 	}
 }

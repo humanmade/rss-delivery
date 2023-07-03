@@ -2,10 +2,10 @@
 /**
  * シングルトンモデル
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator\Model;
+namespace HM\FeedGenerator\Model;
 
 /**
  * Singleton Class

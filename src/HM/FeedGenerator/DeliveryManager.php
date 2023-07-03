@@ -2,13 +2,13 @@
 /**
  * Feed配信関係の処理群
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator;
+namespace HM\FeedGenerator;
 
-use Tarosky\FeedGenerator\Model\Singleton;
-use Tarosky\FeedGenerator\RouterManager;
+use HM\FeedGenerator\Model\Singleton;
+use HM\FeedGenerator\RouterManager;
 use WP_Query;
 
 /**
@@ -80,7 +80,7 @@ class DeliveryManager extends Singleton {
 	public function set_admin_menu() {
 		add_meta_box(
 			'trs_feed_checkbox',
-			__( 'Feed Check', 'fujitv-backend' ),
+			__( 'Feed Check', 'hm-rssdelivery' ),
 			[ $this, 'callback_checkbox_template' ],
 			'post',
 			'side',
@@ -88,7 +88,7 @@ class DeliveryManager extends Singleton {
 		);
 		add_meta_box(
 			'trs_feed_checkbox',
-			__( 'Feed Check', 'fujitv-backend' ),
+			__( 'Feed Check', 'hm-rssdelivery' ),
 			[ $this, 'callback_checkbox_template' ],
 			'video',
 			'side',

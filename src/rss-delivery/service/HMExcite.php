@@ -1,21 +1,21 @@
 <?php
 /**
- * FujiTV SmartNews Feed
+ * Human Made RSS Delivery - SmartNews Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use FujiTV\Rss_Delivery;
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\Excite;
+use HM\RSS_Delivery;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\Excite;
 use WP_Query;
 
 /**
- * RSS for Fuji TV Excite
+ * RSS for Excite
  */
-class FujiTVExcite extends Excite {
+class RSSExcite extends Excite {
 
 	/**
 	 * Display confirmation identification ID for each article.

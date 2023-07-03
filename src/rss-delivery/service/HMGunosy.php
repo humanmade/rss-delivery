@@ -1,22 +1,21 @@
 <?php
 /**
- * FujiTV Gunosy Feed
+ * Human Made RSS Delivery - Gunosy Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use FujiTV\Rss_Delivery;
-use FujiTV\Theme\Assets;
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\Gunosy;
+use HM\RSS_Delivery;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\Gunosy;
 use WP_Query;
 
 /**
- * FujiTVGUnosy用RSS
+ * HM Guunosy用RSS
  */
-class FujiTVGunosy extends Gunosy {
+class HMGunosy extends Gunosy {
 
 	/**
 	 * 記事ごとの表示確認識別ID.

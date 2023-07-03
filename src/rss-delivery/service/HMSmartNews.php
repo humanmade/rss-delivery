@@ -1,41 +1,41 @@
 <?php
 /**
- * FujiTV Main Site Feed
+ * Human Made RSS Delivery - SmartNews Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\FujiMain;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\SmartNews;
 use WP_Query;
 
 /**
- * FujiTVMain用RSS
+ * HM Smart News用RSS
  */
-class FujiTVMain extends FujiMain {
+class HMSmartNews extends SmartNews {
 
 	/**
 	 * 記事ごとの表示確認識別ID.
 	 *
 	 * @var string $id 識別ID.
 	 */
-	protected $id = 'main';
+	protected $id = 'smartnews';
 
 	/**
 	 * サービスごとの表示名.
 	 *
 	 * @var string $label 表示ラベル.
 	 */
-	protected $label = 'Main';
+	protected $label = 'SmartNews';
 
 	/**
 	 * 表示順の優先度.
 	 *
 	 * @var int $order_priolity 表示優先度 大きいほうが優先度が高い.
 	 */
-	protected $order_priolity = 100;
+	protected $order_priolity = 75;
 
 	/**
 	 * Feedを作り出す条件を指定する
@@ -47,7 +47,7 @@ class FujiTVMain extends FujiMain {
 		$id = $this->get_id();
 
 		$query_arg = [
-			'feed'          => 'main',
+			'feed'          => 'smartnews',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
 			'post_status'   => 'publish',
@@ -72,7 +72,22 @@ class FujiTVMain extends FujiMain {
 	 * @param WP_Query $wp_query クエリ.
 	 */
 	public function pre_get_posts( WP_Query &$wp_query ) {
-		parent::pre_get_posts( $wp_query );
+
+		/**
+		 * CHANNEL
+		 */
+		// lastBuildDateの時間をローカルタイムゾーンに合わせる.
+		add_filter( 'get_feed_build_date', function( $max_modified_time, $format ) {
+			return $this->to_local_time( $max_modified_time, $format, 'Asia/Tokyo', true );
+		}, 10, 2 );
+
+		$args = $this->get_query_arg();
+		if ( ! empty( $args ) ) {
+			foreach ( $args as $key => $val ) {
+				$wp_query->set( $key, $val );
+			}
+		}
+		add_action( 'do_feed_smartnews', [ $this, 'do_feed' ] );
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * オートローダー.
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
 /**

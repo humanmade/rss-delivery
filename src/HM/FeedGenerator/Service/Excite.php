@@ -2,19 +2,19 @@
 /**
  * LINE Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator\Service;
+namespace HM\FeedGenerator\Service;
 
-use Tarosky\FeedGenerator\AbstractFeed;
-use Tarosky\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\AbstractFeed;
+use HM\FeedGenerator\DeliveryManager;
 use WP_Query;
 
 /**
  * RSS for Excite
  *
- * @package Tarosky\FeedGenerator\Service
+ * @package HM\FeedGenerator\Service
  */
 class Excite extends AbstractFeed {
 
@@ -139,7 +139,7 @@ class Excite extends AbstractFeed {
 			 * @link https://publishers-support.excite.co.jp/rss-spec-exnews-laurier/
 			 */
 			?>
-			<category><![CDATA[<?php esc_html_e( 'entertainment', 'fujitv' ); ?>]]></category>
+			<category><![CDATA[<?php esc_html_e( 'entertainment', 'hm-rssdelivery' ); ?>]]></category>
 			<?php $this->the_tags(); ?>
 			<?php
 			do_action( 'rss2_item', [ $this, 'rss_add_item' ] );

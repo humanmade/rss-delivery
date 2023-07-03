@@ -1,42 +1,41 @@
 <?php
 /**
- * FujiTV YahooTimeLine Feed
+ * Human Made RSS Delivery - Site Feed
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\RssDelivery\Service;
+namespace HM\RSS_Delivery\Service;
 
-use FujiTV\Rss_Delivery;
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\YahooTimeLine;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\Main;
 use WP_Query;
 
 /**
- * FujiTVYahooTimeLine用RSS
+ * HM Main 用RSS
  */
-class FujiTVYahooTimeLine extends YahooTimeLine {
+class HMMain extends Main {
 
 	/**
 	 * 記事ごとの表示確認識別ID.
 	 *
 	 * @var string $id 識別ID.
 	 */
-	protected $id = 'yahoo-tl';
+	protected $id = 'main';
 
 	/**
 	 * サービスごとの表示名.
 	 *
 	 * @var string $label 表示ラベル.
 	 */
-	protected $label = 'YahooTimeLine';
+	protected $label = 'Main';
 
 	/**
 	 * 表示順の優先度.
 	 *
 	 * @var int $order_priolity 表示優先度 大きいほうが優先度が高い.
 	 */
-	protected $order_priolity = 90;
+	protected $order_priolity = 100;
 
 	/**
 	 * Feedを作り出す条件を指定する
@@ -48,10 +47,10 @@ class FujiTVYahooTimeLine extends YahooTimeLine {
 		$id = $this->get_id();
 
 		$query_arg = [
-			'feed'          => 'yahoo-tl',
+			'feed'          => 'main',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
-			'post_status'   => [ 'publish', 'trash' ],
+			'post_status'   => 'publish',
 			'orderby'       => [
 				'date' => 'DESC',
 			],
@@ -73,26 +72,7 @@ class FujiTVYahooTimeLine extends YahooTimeLine {
 	 * @param WP_Query $wp_query クエリ.
 	 */
 	public function pre_get_posts( WP_Query &$wp_query ) {
-
-		/**
-		 * CHANNEL
-		 */
-		// lastBuildDateの時間をローカルタイムゾーンに合わせる.
-		add_filter( 'get_feed_build_date', function( $max_modified_time, $format ) {
-			return $this->to_local_time( $max_modified_time, $format, 'Asia/Tokyo', true );
-		}, 10, 2 );
-
-		add_action( 'rss_add_channel', function() {
-			Rss_Delivery\print_feed_copyright();
-		} );
-
-		$args = $this->get_query_arg();
-		if ( ! empty( $args ) ) {
-			foreach ( $args as $key => $val ) {
-				$wp_query->set( $key, $val );
-			}
-		}
-		add_action( 'do_feed_yahoo-tl', [ $this, 'do_feed' ] );
+		parent::pre_get_posts( $wp_query );
 	}
 
 	/**

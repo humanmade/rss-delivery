@@ -1,7 +1,7 @@
 /**
- * Fuji TV Rss Delivery
+ * HM RSS Delivery
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
 /* global jQuery */

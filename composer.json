@@ -1,27 +1,22 @@
 {
-    "name": "humanmade/rss-delivery",
-    "description": "RSS Delivery",
-    "type": "wordpress-muplugin",
-    "license": "GPL-2.0-or-later",
-    "config": {
-      "allow-plugins": {
-        "composer/installers": true,
-        "dealerdirect/phpcodesniffer-composer-installer": true
-      },
-      "platform": {
-        "php": "7.2"
-      },
-      "preferred-install": "dist",
-      "process-timeout": 600,
-      "sort-packages": true
-    },
-    "require": {
-      "php": ">=7.2",
-      "composer/installers": "~1.0"
-    },
-    "require-dev": {
-    },
-    "scripts": {
-    }
-  }
-  
+	"name": "humanmade/rss-delivery",
+	"description": "RSS Delivery",
+	"type": "wordpress-muplugin",
+	"license": "GPL-2.0-or-later",
+	"config": {
+	"allow-plugins": {
+		"composer/installers": true,
+		"dealerdirect/phpcodesniffer-composer-installer": true
+	},
+	"platform": {
+		"php": "7.2"
+	},
+	"preferred-install": "dist",
+	"process-timeout": 600,
+	"sort-packages": true
+	},
+	"require": {
+		"php": ">=7.2",
+		"composer/installers": "~1.0"
+	}
+}

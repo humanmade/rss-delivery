@@ -1,21 +1,21 @@
 <?php
 /**
- * Fuji TV Rss Delivery
+ * Human Made RSS Delivery
  *
- * @package FujiTV
+ * @package HM\RSS_Delivery
  */
 
-namespace FujiTV\Rss_Delivery;
+namespace HM\RSS_Delivery;
 
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
-use Tarosky\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\DeliveryManager;
 
-const PREFIX = 'fujitv_featured_media';
+const PREFIX = 'hm_featured_media';
 
 /**
- * Plugin bootstrapper vsc
+ * Plugin bootstrapper
  */
 function bootstrap() {
 	DeliveryManager::instance();
@@ -89,7 +89,7 @@ function print_feed_copyright() : void {
 	echo wp_kses(
 		sprintf(
 			'<copyright>%s</copyright>',
-			esc_html__( '© All rights reserved.', 'fujitv' )
+			esc_html__( '© All rights reserved.', 'hm-rssdelivery' )
 		),
 		[ 'copyright' => [] ]
 	);
