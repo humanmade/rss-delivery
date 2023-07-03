@@ -1,46 +1,39 @@
 <?php
 /**
- * Yahoo Time Line Feed
+ * LINE Feed
  *
  * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator\Service;
+namespace HM\FeedGenerator\Service;
 
-use Tarosky\FeedGenerator\AbstractFeed;
-use Tarosky\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\AbstractFeed;
+use HM\FeedGenerator\DeliveryManager;
 use WP_Query;
 
 /**
- * Yahoo Time Line用RSS
+ * LINE用RSS
  */
-class YahooTimeLine extends AbstractFeed {
+class Line extends AbstractFeed {
 
 	/**
-	 * 記事ごとの表示確認識別ID.
+	 * Current Post ID.
 	 *
-	 * @var string $id 識別ID.
+	 * @var int
 	 */
-	protected $id = 'yahoo-tl';
-
-	/**
-	 * 表示件数.
-	 *
-	 * @var int $per_page 表示件数.
-	 */
-	protected $per_page = 30;
+	protected static $post_id;
 
 	/**
 	 * Feedを作り出す条件を指定する
 	 *
-	 * @return array args query_args.
+	 * @return array
 	 */
 	protected function get_query_arg() {
 		$dm = DeliveryManager::instance();
 		$id = $this->get_id();
 
 		$args = [
-			'feed'          => 'yahoo-tl',
+			'feed'          => 'line',
 			'posts_per_rss' => $this->per_page,
 			'post_type'     => 'post',
 			'post_status'   => [ 'publish', 'trash' ],
@@ -62,20 +55,33 @@ class YahooTimeLine extends AbstractFeed {
 	/**
 	 * クエリの上書き
 	 *
-	 * @param \WP_Query $wp_query クエリ.
+	 * @param WP_Query $wp_query クエリ.
 	 */
 	public function pre_get_posts( WP_Query &$wp_query ) {
 
 		/**
+		 * CHANNEL
+		 */
+		// lastBuildDateの時間をローカルタイムゾーンに合わせる.
+		add_filter( 'get_feed_build_date', function( $max_modified_time, $format ) {
+			return $this->to_local_time( $max_modified_time, $format, 'Asia/Tokyo', true );
+		}, 10, 2 );
+
+		/**
 		 * ITEM
 		 */
+		// guidタグ内容を編集.
+		add_filter( 'the_guid', function( $guid, $id ) {
+			return get_permalink( $id );
+		}, 10, 2 );
+
 		$args = $this->get_query_arg();
-		if ( ! empty( $args ) ) {
+		if ( $args ) {
 			foreach ( $args as $key => $val ) {
 				$wp_query->set( $key, $val );
 			}
 		}
-		add_action( 'do_feed_yahoo-tl', [ $this, 'do_feed' ] );
+		add_action( 'do_feed_line', [ $this, 'do_feed' ] );
 	}
 
 	/**
@@ -85,22 +91,20 @@ class YahooTimeLine extends AbstractFeed {
 	public function do_feed() {
 		$this->xml_header();
 
-		$date = $this->to_local_time( '', 'r', 'Asia/Tokyo' );
 		do_action( 'rss_tag_pre', 'rss2' );
 		?>
 		<rss version="2.0"
-			xmlns:yj="http://cmspf.yahoo.co.jp/rss"
-			yj:version="1.0"
+			xmlns:oa="http://news.line.me/rss/1.0/oa"
 			<?php
 			do_action( 'rss2_ns' );
 			?>
 		>
 
 		<channel>
-			<title><?php wp_title_rss(); ?></title>
+			<title><![CDATA[<?php wp_title_rss(); ?>]]></title>
 			<link><?php bloginfo_rss( 'url' ); ?></link>
-			<description><?php bloginfo_rss( 'description' ); ?></description>
-			<lastBuildDate><?php echo esc_html( $date ); ?></lastBuildDate>
+			<lastBuildDate><?php echo esc_html( get_feed_build_date( 'r' ) ); ?></lastBuildDate>
+			<description><![CDATA[<?php bloginfo_rss( 'description' ); ?>]]></description>
 			<language><?php bloginfo_rss( 'language' ); ?></language>
 			<?php
 			do_action( 'rss_add_channel', [ $this, 'rss_add_channel' ] );
@@ -123,43 +127,21 @@ class YahooTimeLine extends AbstractFeed {
 	 */
 	protected function render_item( $post ) {
 		$content = $this->parse_content( $post->post_content, 'rss2' );
-		$content = preg_replace( '/<a class="image-anchor[^>]*>.*?<\/a>/ims', '', $content );
-		$content = preg_replace( '/<span class="c-thumb__icon[^>]*>.*?<\/span>/ims', '', $content );
-		$content = preg_replace( '/<span class="image-wrapper[^>]*>(.*?)<\/span>/ims', '$1', $content );
-		$content = preg_replace( '/<figcaption>(.*?)<\/figcaption>/ims', '<cite>$1</cite>', $content );
-		$content = preg_replace( '/<figure class="wp-block-image[^>]*>(.*?)<\/figure>/ims', '$1', $content );
-		$content = preg_replace( '/<figure class="wp-block-embed[^>]*>(.*?)<\/figure>/ims', '$1', $content );
-		$content = preg_replace( '/<div class="wp-block-embed__wrapper[^>]*>(.*?)<\/div>/ims', '$1', $content );
+		$status  = $post->post_status === 'publish' ? '2' : '0';
 
-		$pubdate = '';
-		if ( $post->post_status === 'publish' ) {
-			$pubdate_time = $this->to_local_time( get_the_time( 'Y-m-d H:i:s' ), 'r', 'Asia/Tokyo' );
-			$pubdate_mod = $this->to_local_time( get_the_modified_date( 'Y-m-d H:i:s' ), 'r', 'Asia/Tokyo' );
-			if ( strtotime( $pubdate_time ) > strtotime( $pubdate_mod ) ) {
-				$pubdate = $pubdate_time;
-			} else {
-				$pubdate = $pubdate_mod;
-			}
-		}
-		$thumbnail_id = get_post_thumbnail_id( $post->ID );
+		self::$post_id = (int) $post->ID;
+
 		?>
 			<item>
-				<title><?php the_title_rss(); ?></title>
+				<guid><?php the_guid(); ?></guid>
+				<title><![CDATA[<?php the_title_rss(); ?>]]></title>
 				<link><?php the_permalink_rss(); ?></link>
-				<category>trend</category>
-				<guid><?php echo esc_html( get_the_ID() ); ?></guid>
-				<pubDate><?php echo esc_html( $pubdate ); ?></pubDate>
+				<?php $this->the_rss_enclosure( self::$post_id ); ?>
 				<description><![CDATA[<?php echo wp_kses_post( $content ); ?>]]></description>
-				<?php
-				if ( $thumbnail_id ) {
-					printf(
-						'<enclosure url="%1$s" length="%2$d" type="%3$s" />',
-						esc_url( get_the_post_thumbnail_url( null, 'landscape_wide' ) ),
-						esc_attr( filesize( get_attached_file( $thumbnail_id ) ) ),
-						esc_attr( get_post_mime_type( $thumbnail_id ) )
-					);
-				}
-				?>
+				<pubDate><?php echo esc_html( $this->to_local_time( get_the_time( 'Y-m-d H:i:s' ), 'r', 'Asia/Tokyo' ) ); ?></pubDate>
+				<oa:lastPubDate><?php echo esc_html( $this->to_local_time( get_post_modified_time( 'Y-m-d H:i:s' ), 'r', 'Asia/Tokyo' ) ); ?></oa:lastPubDate>
+				<oa:pubStatus><?php echo esc_html( $status ); ?></oa:pubStatus>
+
 				<?php
 					do_action( 'rss2_item', [ $this, 'rss_add_item' ] );
 				?>
@@ -191,7 +173,19 @@ class YahooTimeLine extends AbstractFeed {
 				continue;
 			}
 
-			$parsed_content .= $parsed_block['innerHTML'];
+			$core_embed_blocks = [
+				'core-embed/twitter',
+				'core-embed/youtube',
+				'core-embed/instagram',
+			];
+
+			if ( in_array( $parsed_block['blockName'], $core_embed_blocks, true ) ) {
+				$parsed_content .= $parsed_block['innerHTML'];
+				continue;
+			}
+
+			// Remove Anchor Tag from other blocks except core-embed ones.
+			$parsed_content .= preg_replace( '#<a.*?>([^>]*)</a>#i', '$1', $parsed_block['innerHTML'] );
 		}
 
 		/** This filter is documented in wp-includes/post-template.php */
@@ -201,5 +195,4 @@ class YahooTimeLine extends AbstractFeed {
 		/** This filter is documented in wp-includes/feed.php */
 		return apply_filters( 'the_content_feed', $parsed_content, $feed_type );
 	}
-
 }

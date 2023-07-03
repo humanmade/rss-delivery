@@ -5,16 +5,16 @@
  * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator\Service;
+namespace HM\FeedGenerator\Service;
 
-use Tarosky\FeedGenerator\AbstractFeed;
-use Tarosky\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\AbstractFeed;
+use HM\FeedGenerator\DeliveryManager;
 use WP_Query;
 
 /**
  * HM MainSite用RSS
  */
-class HMMain extends AbstractFeed {
+class Main extends AbstractFeed {
 
 	/**
 	 * 記事ごとの表示確認識別ID.

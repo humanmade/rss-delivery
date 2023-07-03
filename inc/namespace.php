@@ -10,7 +10,7 @@ namespace HM\RSS_Delivery;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
-use Tarosky\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\DeliveryManager;
 
 const PREFIX = 'hm_featured_media';
 

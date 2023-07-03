@@ -8,8 +8,8 @@
 namespace HM\RSS_Delivery\Service;
 
 use HM\RSS_Delivery;
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\Gunosy;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\Gunosy;
 use WP_Query;
 
 /**

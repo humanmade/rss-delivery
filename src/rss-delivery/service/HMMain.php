@@ -7,14 +7,14 @@
 
 namespace HM\RSS_Delivery\Service;
 
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\HMMain;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\Main;
 use WP_Query;
 
 /**
  * HM Main 用RSS
  */
-class HMMMain extends HMMain {
+class HMMain extends Main {
 
 	/**
 	 * 記事ごとの表示確認識別ID.

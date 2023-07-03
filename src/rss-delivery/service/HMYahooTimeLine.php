@@ -8,8 +8,8 @@
 namespace HM\RSS_Delivery\Service;
 
 use HM\RSS_Delivery;
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\YahooTimeLine;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\YahooTimeLine;
 use WP_Query;
 
 /**

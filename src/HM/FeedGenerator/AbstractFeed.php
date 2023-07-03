@@ -5,11 +5,11 @@
  * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator;
+namespace HM\FeedGenerator;
 
 use DateTime;
 use DateTimeZone;
-use Tarosky\FeedGenerator\Model\Singleton;
+use HM\FeedGenerator\Model\Singleton;
 use WP_Query;
 
 /**

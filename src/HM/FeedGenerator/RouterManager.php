@@ -5,9 +5,9 @@
  * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator;
+namespace HM\FeedGenerator;
 
-use Tarosky\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\DeliveryManager;
 use WP_Query;
 
 /**

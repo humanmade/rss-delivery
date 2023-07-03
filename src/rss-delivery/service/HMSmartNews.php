@@ -7,8 +7,8 @@
 
 namespace HM\RSS_Delivery\Service;
 
-use Tarosky\FeedGenerator\DeliveryManager;
-use Tarosky\FeedGenerator\Service\SmartNews;
+use HM\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\Service\SmartNews;
 use WP_Query;
 
 /**

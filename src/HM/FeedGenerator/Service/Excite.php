@@ -5,16 +5,16 @@
  * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator\Service;
+namespace HM\FeedGenerator\Service;
 
-use Tarosky\FeedGenerator\AbstractFeed;
-use Tarosky\FeedGenerator\DeliveryManager;
+use HM\FeedGenerator\AbstractFeed;
+use HM\FeedGenerator\DeliveryManager;
 use WP_Query;
 
 /**
  * RSS for Excite
  *
- * @package Tarosky\FeedGenerator\Service
+ * @package HM\FeedGenerator\Service
  */
 class Excite extends AbstractFeed {
 

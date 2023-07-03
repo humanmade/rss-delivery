@@ -5,10 +5,10 @@
  * @package HM\RSS_Delivery
  */
 
-namespace Tarosky\FeedGenerator;
+namespace HM\FeedGenerator;
 
-use Tarosky\FeedGenerator\Model\Singleton;
-use Tarosky\FeedGenerator\RouterManager;
+use HM\FeedGenerator\Model\Singleton;
+use HM\FeedGenerator\RouterManager;
 use WP_Query;
 
 /**
